@@ -1,51 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Section from './Section';
 import AddFriends from './AddFriends';
+import List from './List';
+import NewFriends from './NewFriends';
 
-class App extends Component {
+const App = () => {
+  const [username, setUsername] = useState('Ayotunde');
+  const [newFriend, setNewFriend] = useState('');
+  const [friends, setFriends] = useState(['isaac', 'ebuka', 'joe']);
 
-  state = {
-   username : 'Ayotunde'
-  }
+  const handleNewlyAddedFriend = (event) => setNewFriend(event.target.value);
+  const addToFriends = () => {
+    setFriends(friends.concat(newFriend));
+    setUsername(newFriend);
+    setNewFriend('');
+  };
 
-  onhandleInsert = (e) => {
-    this.setState({
-      username: e.target.value,
-      friends: ['issac', 'ebuka', 'joe']
-    })
-  
-  }
+  useEffect(() => {
+    document.title = newFriend;
+  }, [newFriend])
 
-
-  render() {
-    const {  
-      onhandleInsert,
-      state: { username }
-    } = this;
-   
-    return (
-      <div className="App">
-        <header className="App-header">
-          <Section Username={username}/>
-          <img src={logo}  className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
+  return (
+    <div className="App">
+      <header className="App-header">
+        <Section username={username} />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
           </p>
-          <AddFriends Username={username} handleInsert={onhandleInsert}/>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+        {/* <AddFriends Username={username} handleInsert={onhandleInsert} /> */}
+        <NewFriends 
+          handleNewlyAddedFriend={handleNewlyAddedFriend}
+          newFriend={newFriend}
+          addToFriends={addToFriends}
+        />
+        <List friends={friends}></List>
+      </header>
+    </div>
+  )
 }
 
 export default App;
